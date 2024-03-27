@@ -1,0 +1,33 @@
+.navbar-brand img{
+    height: 50px;
+    width: 50px;
+    margin-left: 10px;
+}
+
+*{
+    font-family: "century gothic", Arial, Helvetica, sans-serif;
+}
+
+.centering-div .logo{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 10px hsla(0, 0%, 0%, 0.1);
+    cursor: pointer;
+  }
+
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+.center{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

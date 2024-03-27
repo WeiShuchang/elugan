@@ -1,0 +1,144 @@
+{% extends "administrator/base.html" %}
+{% load static %}
+
+{% block content %}
+
+<style>
+    .table-image img {
+        max-width: 178px; /* Set the maximum width of the image */
+        max-height: 100px; /* Set the maximum height of the image */
+    }
+
+    
+</style>
+
+{% if success %}
+<div class="alert alert-success" role="alert" id="alert-message" style="postion:absolute;">
+    {{ success }}
+</div>
+{% endif %}
+
+
+
+
+<div class="center bg-success2 py-3" id="cars" >
+    <h1 class=" fw-bolder text-yellow mb-2">CAR INVENTORY </h1>
+</div>
+
+
+
+<div class="bg-success2 center pb-3">
+    <a class="btn btn-success btn-lg px-4 me-sm-3" href="{% url 'add_car' %}">Add a Car</a>
+</div>
+
+<div class="center bg-success2">
+    {% if messages %}
+        <div class="alert alert-success" role="alert" id="alert-message" >
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
+
+<div class="center bg-success2 py-2">
+<div class="container row " >
+    <div class="col-12">
+        <div class="table-responsive">
+            <table class="table table-image table-bordered bg-success2 ">
+                <thead class="text-yellow">
+                    <tr>
+                        <th scope="col">Make</th>
+                        <th scope="col">Picture</th>
+                        <th scope="col">Model</th>
+                        <th scope="col">Color</th>
+                        <th scope="col">Plate Number</th>
+                        <th scope="col">Mileage</th>
+                        <th scope="col">Engine Size</th>
+                        <th scope="col">Transmission</th>
+                        <th scope="col">Edit</th>
+                        <th scope="col">Delete</th>
+                    </tr>
+                </thead>
+                <tbody class="text-white">
+
+                {% if cars %}
+                    <tr>
+                    {% for car in cars %}
+                        <td>{{car.make}}</td>
+                        <td>
+                            <img src="{{car.car_picture.url}}" class="img-fluid img-thumbnail" alt="Sheep">
+                        </td>
+                        <td>{{car.model}}</td>
+                        <td>{{car.color}}</td>
+                        <td>{{car.plate_number}}</td>
+                        <td>{{car.mileage}}</td>
+                        <td>{{car.engine_size}}</td>
+                        <td>{{car.transmission}}</td>
+                        <td><a class="btn btn-primary" href="{% url 'edit_car' car.id %}">Edit</a></td>
+                        <td><form action="{% url 'del_car' car.id %}"method="post" id="deleteForm">{%csrf_token%}<button type="button" class="btn btn-danger" onclick="confirmDelete()" >Delete</button></form></td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                <tr>
+                    <td>No Cars Available</td>
+                    <td>
+                        
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><a class="btn btn-primary" href="">Edit</a></td>
+                    <td><a class="btn btn-danger" href="">Delete</a></td>
+                </tr>
+                {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</div>
+
+
+<header class="bg-success py-5 ">
+    <div class="container px-3 py-4">
+        <div class="row gx-5 align-items-center justify-content-center">
+            <div class="col-lg-8 col-xl-7 col-xxl-6">
+                <div class="my-5 text-center text-xl-start">
+                    <h1 class="display-1 fw-bolder text-yellow mb-2">CAR INVENTORY: </h1>
+                    <p class="lead fw-normal text-white-50 mb-4">Administrator Level</p>
+                    <div class="d-grid gap-3 d-sm-flex justify-content-sm-center justify-content-xl-start">
+                        <a class="btn btn-success btn-lg px-4 me-sm-3" href="{% url 'add_car' %}">Add a Car</a>
+                        <a class="btn btn-outline-light btn-lg px-4" href="#cars">View Cars</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-5 col-xxl-6 d-none d-xl-block text-center"><img class="img-fluid rounded-3 my-5" src="{% static 'home/images/eluganbg.png'  %}" alt="..." /></div>
+        </div>
+    </div>
+</header>
+
+<script>
+    function confirmDelete() {
+        if (confirm("Are you sure you want to delete this car?")) {
+            document.getElementById("deleteForm").submit();
+        }
+    }
+     // Ensure the DOM is loaded before accessing elements
+     document.addEventListener("DOMContentLoaded", function() {
+        // Get the alert message element
+        let alertMessage = document.getElementById("alert-message");
+        
+        // Set timeout to hide the alert after 5000 milliseconds (5 seconds)
+        setTimeout(function() {
+            // Hide the alert by changing its display style to "none"
+            alertMessage.style.display = "none";
+        }, 4000); 
+    });
+</script>
+
+
+{% endblock content %}

@@ -1,0 +1,74 @@
+{% extends "administrator/base.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="center bg-success2 pt-3">
+    <h1 class=" fw-bolder text-yellow mb-2">Edit {{driver.driver_name}} | {{driver.contact_number}}</h1>
+</div>
+
+            
+
+{% if form.errors %}
+<div class="alert alert-danger mt-3">
+    {% for field, errors in form.errors.items %}
+        {% for error in errors %}
+            {{ error }}
+        {% endfor %}
+    {% endfor %}
+</div>
+{% endif %}
+
+<div class="bg-success2 container-fluid" style="height:100vh;">
+    <form method="post" enctype="multipart/form-data">
+    <div class="row">
+        <div class="col-md-4 center  bg-success2 ">
+            <div class="row text-white">
+                <img class="img-fluid img-thumbnail col-md-12"src="{{driver.driver_picture.url}}" alt="" width="400px" height="200">
+                
+            </div>
+        </div>        
+
+
+
+    <div class=" py-3 col-md-8 text-white">
+
+
+            {% csrf_token %}
+
+        <div class="row">
+            <div class="form-group col-md-6">
+                <label for="driver_name" class="">Driver Name</label>
+                <input type="text" class="form-control" value="{{driver.driver_name}}" id="driver_name" name="driver_name">
+            </div>
+
+            <div class="form-group col-md-6">
+                <label for="license_number">License Number</label>
+                <input type="text" class="form-control" value="{{driver.license_number}}" id="license_number" name="license_number">
+            </div>
+    
+            <div class="form-group col-md-6">
+                <label for="contact_number">Contact Number</label>
+                <input type="contact_number" class="form-control" value="{{driver.contact_number}}" id="contact_number" name="contact_number">
+            </div>
+            <div class="form-group col-md-6">
+                <label for="driver_status">Driver Satus</label>
+                <input type="text" class="form-control" value="{{driver.driver_status}}" id="driver_status" name="driver_status">
+            </div>
+            <div class="form-group col-md-6 pt-2">
+                <label for="driver_picture ">Driver Image</label>
+                <input type="file" name="driver_picture" value="{{driver.driver_picture.url}}" id="driver_picture" accept="image/*">
+            </div>
+
+            <div class="form-group col-md-6 mt-4">
+                <button type="submit" class="btn btn-success ">Edit Driver</button>
+                <a href="{% url 'driver_inventory' %}" class="my-2 btn btn-warning ">Cancel</a>
+            </div>
+        </div>
+        </form>
+    </div>
+</div>
+</div>
+
+
+{% endblock content %}
