@@ -33,6 +33,8 @@ urlpatterns = [
     path('reserve_car', views.reservecar_view, name="reserve_car"),
     path('reservations', views.reservations_view, name="reservations"),
     path('del_reservation/<int:res_id>', views.del_reservation_view, name="del_reservation"),
+    path('approve_reservation/<int:res_id>', views.approve_reservation_view, name="approve_reservation"),
+    path('approved_requests', views.approved_requests_view, name="approved_requests"),
 
 
     #Driver CRUD

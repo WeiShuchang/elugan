@@ -46,6 +46,7 @@ class Reservation(models.Model):
     date_of_travel = models.DateField(null=True, blank=True)
     purpose_of_travel = models.CharField(blank=True,max_length=100)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    is_approved = models.BooleanField(default=False)
 
     def __str__(self):
         return (
@@ -53,6 +54,24 @@ class Reservation(models.Model):
             f"{self.contact_number} "
         )
     
-    
+class ApprovedReservation(models.Model):
+    driver = models.ForeignKey(Driver,on_delete=models.CASCADE)
+    car = models.ForeignKey(Car, on_delete=models.CASCADE)
+    office_department_college = models.CharField(blank=True,null=True,max_length=50)
+    contact_number = models.IntegerField(blank=True,null=True)
+    appointment_status = models.CharField(blank=True,null=True,max_length=50)
+    requestor_address = models.CharField(blank=True,max_length=100)
+    date_of_travel = models.DateField(null=True, blank=True)
+    expected_return_date = models.DateField(null=True,blank=True, auto_now=False, auto_now_add=False)
+    destination = models.CharField(blank=True,max_length=100)
+    number_of_passengers = models.IntegerField()
+    purpose_of_travel = models.CharField(blank=True,max_length=100)
+    requestor_name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return (
+            f"{self.requestor_name} |"
+            f"{self.contact_number} "
+        )
     
     

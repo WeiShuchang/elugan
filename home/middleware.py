@@ -16,13 +16,14 @@ class AdminRedirectMiddleware:
                 return HttpResponseRedirect(reverse('administrator'))  # Redirect to admin dashboard URL
         
         if request.user.is_authenticated and not request.user.is_superuser:
-            if request.path == settings.LOGIN_URL or request.path == '/' or request.path == '/administrator' or request.path == '/admin' or request.path == '/car_inventory' or request.path == '/login' or request.path == '/reservations' :
+            if request.path == settings.LOGIN_URL or request.path == '/' or request.path == '/administrator' or request.path == '/admin' or request.path == '/car_inventory' or request.path == '/login' or request.path == '/reservations' or request.path == '/approved_requests':
                 return HttpResponseRedirect(reverse('user'))  # Redirect to admin dashboard URL
 
-        if request.path in ['/user', '/administrator', '/add_car', '/car_inventory']:
-            # Check if the user is not authenticated
-            if not request.user.is_authenticated:
-                # Redirect to the login page
+       
+        # Check if the user is not authenticated
+        if not request.user.is_authenticated:
+            if request.path not in ['/','/login', '/register', '/about']:
+            # Redirect to the login page
                 return redirect(reverse('login'))  # Replace 'login' with your actual login URL name
 
         return response

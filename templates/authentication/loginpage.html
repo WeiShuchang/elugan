@@ -11,6 +11,14 @@
               {{ error }}
           </div>
         {% endif %}
+
+        {% if messages %}
+            <div class="alert alert-success" role="alert" id="alert-message">
+                {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </div>
+        {% endif %}
           
           <div class="d-flex align-items-center h-custom-2  px-5 ms-xl-4 mt-5 pt-5 pt-xl-0 mt-xl-n5">
 
@@ -86,4 +94,19 @@
         </div>
     </div>
 </section>
+
+<script>
+  // Ensure the DOM is loaded before accessing elements
+  document.addEventListener("DOMContentLoaded", function() {
+      // Get the alert message element
+      let alertMessage = document.getElementById("alert-message");
+      
+      // Set timeout to hide the alert after 5000 milliseconds (5 seconds)
+      setTimeout(function() {
+          // Hide the alert by changing its display style to "none"
+          alertMessage.style.display = "none";
+      }, 4000); 
+  });
+</script>
+
 {% endblock content %}

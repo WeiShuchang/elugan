@@ -8,21 +8,27 @@
 </div>
 
 
-<div class="container-fluid bg-success2 style="height:100vh">
-
+<div class="container-fluid bg-success2 vh-100" >
+{% if messages %}
+    <div class="alert alert-success" role="alert" id="alert-message">
+        {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </div>
+{% endif %}
 <div class="bg-success2 row justify-content-start ml-3 pl-3" >
-    {% if reservations %}
+{% if reservations %}
     {% for reservation in reservations %}
 
-    <div class="card mx-2 col-md-3 mt-4 mb-4" style="width: 19rem;">
+    <div class="card mx-2 col-md-3 mt-4 mb-4 bg-success text-white" style="width: 19rem;">
         {% comment %} {% endcomment %}
-        <div class="card-body">
+        <div class="card-body" onclick="location.href='{% url 'approve_reservation' reservation.id %}'">
         <div class="row">
             <div class="col-md-8">
                 <h6 class="card-title font-weight-bold">Reservation by:</h6>
-                <h5 class="card-title text-danger font-weight-bolder"> {{reservation.requestor_name}}</h5>
+                <h5 class="card-title text-warning font-weight-bolder"> {{reservation.requestor_name}}</h5>
                 <h6 class="card-title font-weight-bold mt-4">Reason for Travel:</h6>
-                <h6 class="card-title  font-weight-bolder ">{{reservation.purpose_of_travel}}</h6>
+                <h6 class="card-title text-warning  font-weight-bolder ">{{reservation.purpose_of_travel}}</h6>
             </div>
             <div class="col-md-4">
                 <img src="{% static 'home/images/eluganbg.png' %}" height="70px" width="70px" alt="eluganbg" style="border-radius:50%;">
@@ -32,38 +38,54 @@
           <p class="card-text">
             <ul>
                 <li class="font-weight-bold">Number of Passengers: </li>
-                <p>{{reservation.number_of_passengers }}</p>
+                <p class="text-warning">{{reservation.number_of_passengers }}</p>
                 <li class="font-weight-bold">Destination: </li>
-                <p>{{reservation.destination}}</p>
+                <p class="text-warning">{{reservation.destination}}</p>
                 <li class="font-weight-bold">Date of Travel: </li>
-                <p>{{reservation.date_of_travel}}</p>
+                <p class="text-warning">{{reservation.date_of_travel}}</p>
             </ul>
           </p>
 
+
+
+        </div>
+        <div class="row p-3">
             <div class="row">
-                <div class="col-md-4">
-                    <a href="#" class="btn btn-primary ">View</a>
+                <div class="col-md-6">
+                    <a href="{% url 'approve_reservation' reservation.id %}"  class="btn btn-primary ">View</a>
                 </div>
-   
-                <div class="col-md-8">
+
+                <div class="col-md-6">
                     <form class="" action="{% url 'del_reservation' reservation.id %}" method="post" id="deleteForm">{%csrf_token%}<button type="button" class="btn btn-danger " onclick="confirmDelete()" >Delete</button></form>
                 </div>
- 
             </div>
-
         </div>
     </div>
 
 
     {% endfor %}
     {% else %}
-    <div><p class="text-white">
-        No Requests Yet
-    </p></div>
+    <div class="card mx-2 col-md-3 mt-4 mb-4 bg-success text-white" style="width: 19rem;">
+        {% comment %} {% endcomment %}
+        <div class="card-body ">
+        <div class="row">
+            <h3 class="card-title font-weight-bold my-3 text-warning">No Existing Reservations</h3>
+            
+        </div>
+
+          
+
+
+
+        </div>
+      
+    </div>
     {% endif %}
 
 
 </div>
+
+
 </div>
 
 

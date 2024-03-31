@@ -7,12 +7,13 @@
     <title>ELugan</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <!-- Favicon-->
-    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+
     <!-- Bootstrap icons-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
     <!-- Core theme CSS (includes Bootstrap)-->
     <link href="{% static 'home/css/styles.css' %}" rel="stylesheet" />
     <link rel="stylesheet" href="{% static 'home/css/homestyles.css' %}">
+    <link rel="icon" type="image/png" href="{% static 'home/images/elugan.png' %}">
 </head>
 <body>
     <!--NavBar-->
@@ -36,11 +37,12 @@
               <a class="nav-link text-white mx-3" href="{% url 'user' %}">Car Information<span class="sr-only">(current)</span></a>
             </li>
 
+           
+          </ul>
+          <ul class="navbar-nav">
             <li class="nav-item">
               <a class="nav-link text-white mx-3" href="#">About System</a>
             </li>
-          </ul>
-          <ul class="navbar-nav">
             {% if user.is_authenticated %}
               <li class="nav-item">
                 <a href="#" onclick="$('#signOutBtn').click()" class="mx-3 nav-link text-white left">Logout</a>

@@ -1,5 +1,5 @@
 from django import forms
-from .models import Car, Driver, Reservation
+from .models import Car, Driver, Reservation, ApprovedReservation
 
 
 class CarForm(forms.ModelForm):
@@ -28,3 +28,16 @@ class ReservationForm(forms.ModelForm):
     class Meta:
         model = Reservation
         exclude = ['user']  
+    
+
+class ApprovedReservationForm(forms.ModelForm):
+    def __init__(self, *args, exclude_unavailable=False, **kwargs):
+        super(ApprovedReservationForm,self).__init__(*args, **kwargs)
+        if exclude_unavailable:
+            self.fields['driver'].queryset = Driver.objects.exclude(approvedreservation__isnull=False)
+            self.fields['car'].queryset = Car.objects.exclude(approvedreservation__isnull=False)
+        
+    class Meta:
+        model = ApprovedReservation
+        fields = ['office_department_college', "requestor_address" ,'contact_number','appointment_status', 'driver', 'car', 'date_of_travel', 'expected_return_date', 'destination', 
+                  'number_of_passengers', 'purpose_of_travel', 'requestor_name']

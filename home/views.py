@@ -4,9 +4,10 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django.contrib.auth import login, logout , authenticate
 from django.contrib.auth.decorators import login_required
-from .models import Car, Driver, Reservation
-from .forms import CarForm, DriverForm, ReservationForm
+from .models import Car, Driver, Reservation, ApprovedReservation
+from .forms import CarForm, DriverForm, ReservationForm, ApprovedReservationForm
 from django.contrib import messages
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 # Create your views here.
 def homepage(request):
@@ -32,7 +33,7 @@ def logout_view(request):
     if request.method == 'POST':
         logout(request)
         messages.success(request, 'You have been successfully logged out!')
-        return redirect('home')
+        return redirect('login')
 
 def register_view(request):
     if request.method == "GET":
@@ -169,7 +170,7 @@ def deletedriver_view(request, driver_id):
         return render(request, 'administrator/driver_inventory.html')
 
 def reservations_view(request):
-    reservations = Reservation.objects.all().order_by("-id")
+    reservations = Reservation.objects.filter(is_approved=False).order_by("-id")
     return render(request, "administrator/reservations.html", {"reservations":reservations})
 
 
@@ -194,3 +195,42 @@ def administrator_view(request):
 def user_view(request):
     return render(request, 'user/user.html')
 
+
+def approve_reservation_view(request, res_id):
+    reservation = get_object_or_404(Reservation, pk=res_id)
+
+    if request.method == 'POST':
+        # If it's a POST request, process the form data
+        form = ApprovedReservationForm(request.POST, request.FILES)
+        if form.is_valid():
+            # If form data is valid, save changes to the database
+            form.save()
+            reservation.is_approved = True  # Set is_approved to True
+            reservation.save()
+            messages.success(request, "Reservation Has Been Approved")
+            return redirect('reservations')  # Assuming 'car_inventory' is the name of your car inventory page URL
+    else:
+        # If it's a GET request, create a form pre-filled with the car's data
+        form = ApprovedReservationForm()
+    
+    # Pass the form to the template for rendering
+    return render(request, 'administrator/approve_reservation.html', {'form': form, 'reservation': reservation})
+
+def approved_requests_view(request):
+    approved_reservations = ApprovedReservation.objects.all().order_by("-id")
+
+    per_page = 7
+
+    paginator = Paginator(approved_reservations, per_page)
+
+    page_number = request.GET.get('page')
+    try:
+        approved_reservations = paginator.page(page_number)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        approved_reservations = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range, deliver last page of results.
+        approved_reservations = paginator.page(paginator.num_pages)
+
+    return render(request, "administrator/approved_requests.html", {'approved_reservations':approved_reservations})
